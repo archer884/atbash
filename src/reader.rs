@@ -3,6 +3,7 @@ use std::io::{Read, Result};
 
 pub trait Atbash<R> {
     fn atbash(self) -> AtbashReader<R>;
+    fn atbash_with(self, upper: &str, lower: &str) -> AtbashReader<R>;
 }
 
 impl<R: Read> Atbash<R> for R {
@@ -12,6 +13,16 @@ impl<R: Read> Atbash<R> for R {
             bytemap: build_mapping(
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
                 "abcdefghijklmnopqrstuvwxyz",
+            )
+        }
+    }
+
+    fn atbash_with(self, upper: &str, lower: &str) -> AtbashReader<R> {
+        AtbashReader {
+            inner: self,
+            bytemap: build_mapping(
+                upper,
+                lower,
             )
         }
     }
